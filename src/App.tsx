@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import 'bulma/css/bulma.css';
 import './App.scss';
 
-enum SortParameter {
+enum SortType {
   Length = 'length',
   Alphabet = 'alphabet',
   None = '',
@@ -22,19 +22,15 @@ export const goodsFromServer = [
   'Garlic',
 ];
 
-function prepareList(
-  list: string[],
-  sortParam: SortParameter,
-  isReverse: boolean,
-) {
+function prepareList(list: string[], sortParam: SortType, isReverse: boolean) {
   const preparedList = [...list];
 
   switch (sortParam) {
-    case 'alphabet':
+    case SortType.Alphabet:
       preparedList.sort((a, b) => a.localeCompare(b));
       break;
 
-    case 'length':
+    case SortType.Length:
       preparedList.sort((a, b) => a.length - b.length);
       break;
 
@@ -50,7 +46,7 @@ function prepareList(
 }
 
 export const App: React.FC = () => {
-  const [sortParam, setSortParam] = useState<SortParameter>(SortParameter.None);
+  const [sortParam, setSortParam] = useState<SortType>(SortType.None);
   const [isReverse, setIsReverse] = useState(false);
 
   const visibleGoods = prepareList(goodsFromServer, sortParam, isReverse);
@@ -63,7 +59,7 @@ export const App: React.FC = () => {
           className={cn('button is-info', {
             'is-light': sortParam !== 'alphabet',
           })}
-          onClick={() => setSortParam(SortParameter.Alphabet)}
+          onClick={() => setSortParam(SortType.Alphabet)}
         >
           Sort alphabetically
         </button>
@@ -73,7 +69,7 @@ export const App: React.FC = () => {
           className={cn('button is-success', {
             'is-light': sortParam !== 'length',
           })}
-          onClick={() => setSortParam(SortParameter.Length)}
+          onClick={() => setSortParam(SortType.Length)}
         >
           Sort by length
         </button>
@@ -93,7 +89,7 @@ export const App: React.FC = () => {
             type="button"
             className="button is-danger is-light"
             onClick={() => {
-              setSortParam(SortParameter.None);
+              setSortParam(SortType.None);
               setIsReverse(false);
             }}
           >
