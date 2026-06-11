@@ -3,7 +3,11 @@ import React, { useState } from 'react';
 import 'bulma/css/bulma.css';
 import './App.scss';
 
-type SortParameter = 'length' | 'alphabet' | '';
+enum SortParameter {
+  Length = 'length',
+  Alphabet = 'alphabet',
+  None = '',
+}
 
 export const goodsFromServer = [
   'Dumplings',
@@ -46,7 +50,7 @@ function prepareList(
 }
 
 export const App: React.FC = () => {
-  const [sortParam, setSortParam] = useState<SortParameter>('');
+  const [sortParam, setSortParam] = useState<SortParameter>(SortParameter.None);
   const [isReverse, setIsReverse] = useState(false);
 
   const visibleGoods = prepareList(goodsFromServer, sortParam, isReverse);
@@ -59,7 +63,7 @@ export const App: React.FC = () => {
           className={cn('button is-info', {
             'is-light': sortParam !== 'alphabet',
           })}
-          onClick={() => setSortParam('alphabet')}
+          onClick={() => setSortParam(SortParameter.Alphabet)}
         >
           Sort alphabetically
         </button>
@@ -69,7 +73,7 @@ export const App: React.FC = () => {
           className={cn('button is-success', {
             'is-light': sortParam !== 'length',
           })}
-          onClick={() => setSortParam('length')}
+          onClick={() => setSortParam(SortParameter.Length)}
         >
           Sort by length
         </button>
@@ -89,7 +93,7 @@ export const App: React.FC = () => {
             type="button"
             className="button is-danger is-light"
             onClick={() => {
-              setSortParam('');
+              setSortParam(SortParameter.None);
               setIsReverse(false);
             }}
           >
